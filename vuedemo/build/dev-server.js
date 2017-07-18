@@ -21,6 +21,7 @@ var autoOpenBrowser = !!config.dev.autoOpenBrowser
 var proxyTable = config.dev.proxyTable
 
 var app = express()
+// var jsonServer = new jsonServer()
 var compiler = webpack(webpackConfig)
 
 var devMiddleware = require('webpack-dev-middleware')(compiler, {
@@ -63,6 +64,18 @@ app.use(hotMiddleware)
 var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
 app.use(staticPath, express.static('./static'))
 
+// 加入的
+var jsonServer=require('json-server')
+const apiServer = jsonServer.create()
+// db.json是与index.html同级
+const apiRouter = jsonServer.router('db.json')
+const middlewares = jsonServer.defaults()
+
+apiServer.use(middlewares)
+apiServer.use('/api',apiRouter)
+apiServer.listen(port + 1, () => {
+  console.log('JSON Server is running')
+})
 var uri = 'http://localhost:' + port
 
 var _resolve

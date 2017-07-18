@@ -19,7 +19,7 @@
         <h2>最新消息</h2>
         <ul>
           <li v-for="item in newsList">
-            <a :href="item.url" class="new-item">{{ item.title }}</a>
+            <a :href="item.url" class="new-item" :title="item.title">{{ item.title }}</a>
           </li>
         </ul>
       </div>
@@ -45,9 +45,51 @@
 </template>
 
 <script>
-  export default{
+  export default {
+    created:function () {
+      this.$http.get('api/getNewsList').
+      then((res)=>{
+        console.log(res.data);
+        this.newsList=res.data;
+      },(err) => {
+        alert("请求失败");
+      })
+    },
       data () {
           return {
+            boardList: [
+              {
+                title: '开放产品',
+                description: '开放产品是一款开放产品',
+                id: 'car',
+                toKey: 'analysis',
+                saleout: false
+              },
+              {
+                title: '品牌营销',
+                description: '品牌营销帮助你的产品更好地找到定位',
+                id: 'earth',
+                toKey: 'count',
+                saleout: false
+              },
+              {
+                title: '使命必达',
+                description: '使命必达快速迭代永远保持最前端的速度',
+                id: 'loud',
+                toKey: 'forecast',
+                saleout: true
+              },
+              {
+                title: '勇攀高峰',
+                description: '帮你勇闯高峰，到达事业的顶峰',
+                id: 'hill',
+                toKey: 'publish',
+                saleout: false
+              }
+            ],
+            newsList: [
+
+            ],
             productList: {
                 pc: {
                     title:"PC产品",
@@ -70,30 +112,30 @@
                       url: 'http://hearstone.com'
                     }
                   ]
-                }
-            },
-            app: {
-              title: '手机应用类',
-              last: true,
-              list: [
-                {
-                  name: '91助手',
-                  url: 'http://weixin.com'
                 },
-                {
-                  name: '产品助手',
-                  url: 'http://twitter.com',
-                  hot: true
-                },
-                {
-                  name: '智能地图',
-                  url: 'http://maps.com'
-                },
-                {
-                  name: '团队语音',
-                  url: 'http://phone.com'
-                }
-              ]
+              app: {
+                title: '手机应用类',
+                last: true,
+                list: [
+                  {
+                    name: '91助手',
+                    url: 'http://weixin.com'
+                  },
+                  {
+                    name: '产品助手',
+                    url: 'http://twitter.com',
+                    hot: true
+                  },
+                  {
+                    name: '智能地图',
+                    url: 'http://maps.com'
+                  },
+                  {
+                    name: '团队语音',
+                    url: 'http://phone.com'
+                  }
+                ]
+              }
             }
           }
       }
@@ -128,6 +170,7 @@
     color: #fff;
     padding: 10px 15px;
     margin-bottom: 20px;
+
   }
   .index-left-block h3 {
     padding: 0 15px 5px 15px;
@@ -136,9 +179,14 @@
   }
   .index-left-block ul {
     padding: 10px 15px;
+    /*text-align: center;*/
   }
   .index-left-block li {
     padding: 5px;
+  }
+  .index-left-block li:hover {
+    background-color: #cccccc;
+    color: #FF6905;
   }
   .index-board-list {
     overflow: hidden;

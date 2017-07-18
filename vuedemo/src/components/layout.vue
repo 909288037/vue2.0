@@ -3,7 +3,7 @@
     <div class="app-head">
       <div class="app-head-inner">
           <img src="../assets/logo.png">
-          <p>XX电商平台</p>
+          <p>Vue电商平台</p>
         <div class="head-nav">
           <ul class="nav-list">
             <li><a href="javascript:void(0);">登录</a></li>
@@ -96,6 +96,7 @@
     font-size: 14px;
     color: #444;
   }
+
   .app-head {
     background: #363636;
     color: #b2b2b2;
