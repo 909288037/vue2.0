@@ -6,16 +6,19 @@
           <p>Vue电商平台</p>
         <div class="head-nav">
           <ul class="nav-list">
-            <li><a href="javascript:void(0);">登录</a></li>
+            <li> {{ username }}</li>
+            <li v-if="username!== ''" class="nav-pile">|</li>
+            <li v-if="username!== ''" @click="quit">退出</li>
+            <li v-if="username=== ''" @click="logClick">登录</li>
             <li class="nav-pile">|</li>
-            <li><a href="javascript:void(0);">注册</a></li>
-            <li class="nav-pile">|</li>
-            <li><a href="javascript:void(0);">关于</a></li>
+            <li v-if="username=== ''" @click="regClick">注册</li>
+            <li v-if="username=== ''" class="nav-pile">|</li>
+            <li @click="aboutClick">关于</li>
           </ul>
         </div>
       </div>
     </div>
-    <div class="app-content">
+    <div>
       <keep-alive>
         <router-view></router-view>
       </keep-alive>
@@ -23,16 +26,57 @@
     <div class="app-footer">
       <p>© 2017 Vue Study</p>
     </div>
+    <my-dialog :is-show="isShowAboutDialog" @on-close="closeDialog('isShowAboutDialog')">
+      <p>学习使我快乐(*^__^*) 嘻嘻</p>
+    </my-dialog>
+
+    <my-dialog :is-show="isShowLogDialog" @on-close="closeDialog('isShowLogDialog')">
+      <log-form @has-log="onSuccessLog"></log-form>
+    </my-dialog>
+
+    <my-dialog :is-show="isShowRegDialog" @on-close="closeDialog('isShowRegDialog')">
+      <reg-form></reg-form>
+    </my-dialog>
   </div>
 </template>
 
 <script>
+  import Dialog from './dialog'
+  import LogForm from './logForm'
+  import RegForm from './regForm'
   export default {
     name: 'app',
+    components: {
+      MyDialog: Dialog,
+      LogForm,
+      RegForm
+    },
     data(){
         return{
-
+          isShowAboutDialog: false,
+          isShowLogDialog: false,
+          isShowRegDialog: false,
+          username: ''
         }
+    },
+    methods: {
+      aboutClick () {
+        this.isShowAboutDialog = true
+      },
+      logClick () {
+        this.isShowLogDialog = true
+      },
+      regClick () {
+        this.isShowRegDialog = true
+      },
+      closeDialog (attr) {
+        this[attr] = false
+      },
+      onSuccessLog (data) {
+        console.log(data)
+        this.closeDialog ('isShowLogDialog')
+        this.username = data.username
+      }
     }
   }
 </script>
@@ -128,11 +172,11 @@
     overflow: hidden;
   }
   .head-nav li {
-    /*cursor: pointer;*/
     float: left;
   }
-  .head-nav li>a:hover {
+  .head-nav li:nth-child(2n):hover {
     color: #fff9f0;
+    cursor: pointer;
   }
   .nav-pile {
     padding: 0 10px;
@@ -145,5 +189,50 @@
     background: #e3e4e8;
     clear: both;
     margin-top: 30px;
+  }
+
+  .hr {
+    height: 1px;
+    width: 100%;
+    background: #ddd;
+  }
+  .button {
+    background: #4fc08d;
+    color: #fff;
+    display: inline-block;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  .button:hover {
+    background: #4fc08d;
+  }
+  .g-form {
+
+  }
+  .g-form-line {
+    padding: 15px 0;
+  }
+  .g-form-label {
+    width: 100px;
+    font-size: 16px;
+    display: inline-block;
+  }
+  .g-form-input {
+    display: inline-block;
+  }
+  .g-form-input input {
+    height: 30px;
+    width: 200px;
+    line-height: 30px;
+    vertical-align: middle;
+    padding: 0 10px;
+    border: 1px solid #ccc;
+  }
+  .g-form-btn {
+    padding-left: 100px;
+  }
+  .g-form-error {
+    color: red;
+    padding-left: 15px;
   }
 </style>
